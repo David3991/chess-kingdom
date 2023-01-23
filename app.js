@@ -1,6 +1,7 @@
 const express = require("express");
 const http = require("http");
 const socket = require("socket.io");
+const { v4: uuidv4 } = require('uuid');
 
 const port = process.env.PORT || 3000;
 
@@ -24,7 +25,7 @@ app.get("/", (req, res) => {
 io.on("connection", function (socket) {
   // console.log(players);
   var color;
-  var playerId = Math.floor(Math.random() * 100 + 1);
+  var playerId = uuidv4();
 
   console.log(playerId + " connected");
 
