@@ -1,0 +1,30 @@
+{
+  "name": "chess-kingdom",
+  "version": "1.0.0",
+  "description": "An online chess website",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "David Pirneci & Gentea Robert",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "express": "^4.18.2",
+    "socket.io": "^2.1.1"
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/David3991/chess-kingdom.git"
+  },
+  "keywords": [
+    "chess",
+    "board",
+    "game"
+  ],
+  "bugs": {
+    "url": "https://github.com/David3991/chess-kingdom/issues"
+  },
+  "homepage": "https://github.com/David3991/chess-kingdom#readme"
+}
