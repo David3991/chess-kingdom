@@ -28,7 +28,7 @@ socket.on("full", function (msg) {
 socket.on("play", function (msg) {
   if (msg == roomId) {
     play = false;
-    state.innerHTML = "Game in progress";
+    state.innerHTML = "Game in Progress";
   }
   // console.log(msg)
 });

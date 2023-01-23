@@ -9,7 +9,6 @@ var app = express();
 const server = http.createServer(app);
 const io = socket(server);
 var players;
-var joined = true;
 
 app.use(express.static(__dirname + "/public"));
 
@@ -72,5 +71,6 @@ io.on("connection", function (socket) {
   });
 });
 
-server.listen(port);
-console.log("Connected");
+server.listen(port, () => {
+  console.log("Server running on port", port);
+})
