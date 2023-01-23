@@ -54,6 +54,10 @@ io.on("connection", function (socket) {
     // console.log(msg);
   });
 
+  socket.on("gameOver", function (roomId) {
+    socket.broadcast.emit("gameOver", roomId);
+  });
+
   socket.on("play", function (msg) {
     socket.broadcast.emit("play", msg);
     console.log("ready " + msg);

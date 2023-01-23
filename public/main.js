@@ -118,6 +118,12 @@ var onSnapEnd = function () {
   board.position(game.fen());
 };
 
+socket.on('gameOver', (dRoomId) => {
+  if (dRoomId === roomId) {
+    state.innerHTML = "GAME OVER";
+  }
+})
+
 socket.on("player", (msg) => {
   var plno = document.getElementById("player");
   color = msg.color;
