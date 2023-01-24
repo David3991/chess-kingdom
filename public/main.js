@@ -33,6 +33,9 @@ socket.on('showRooms', (games) => {
 
     boardSq.addEventListener("click", function () {
       socket.emit("joined", games[i].roomId)
+      for (let board of boards.children) {
+        board.remove()
+      }
       createRoomBtn.remove()
     });
 
