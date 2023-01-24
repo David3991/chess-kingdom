@@ -7,6 +7,7 @@ var roomId;
 var play = true;
 var moveSound = new Audio('./sounds/move-self.mp3');
 var captureSound = new Audio('./sounds/capture.mp3');
+var capturedPieces = [];
 
 var state = document.getElementById("state");
 
@@ -103,6 +104,8 @@ var onDragStart = function (source, piece) {
   // console.log({play, players});
 };
 
+var points = 0;
+
 var onDrop = function (source, target) {
   removeGreySquares();
 
@@ -119,7 +122,23 @@ var onDrop = function (source, target) {
 
   // illegal move
   if (move === null) return "snapback";
-  else if (move.captured) captureSound.play()
+  else if (move.captured) {
+    captureSound.play()
+
+    if (move.captured.toLowerCase() === move.captured) {
+      if (move.captured === 'p') {
+        points += 1;
+      } else if (move.captured === 'n' || move.captured === 'b') {
+        points += 3;
+      } else if (move.captured === 'r') {
+        points += 5;
+      } else if (move.captured === 'q') {
+        points += 9;
+      }
+    }
+    console.log("Points: " + points);
+  }
+
   else moveSound.play(); socket.emit("move", { move: move, board: game.fen(), room: roomId });
 };
 
