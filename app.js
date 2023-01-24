@@ -13,14 +13,6 @@ var players;
 app.use(express.static(__dirname + "/public"));
 
 var games = []
-// var games = Array(100);
-// for (let i = 0; i < 100; i++) {
-//   games[i] = { players: 0, pid: [0, 0] };
-// }
-
-app.get("/", (req, res) => {
-  res.sendFile(__dirname + "/index.html");
-});
 
 io.on("connection", function (socket) {
   // console.log(players);

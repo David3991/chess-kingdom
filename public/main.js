@@ -25,30 +25,32 @@ socket.on('showRooms', (games) => {
     board.remove()
   }
   for (let i = 0; i < games.length; i++) {
-    const boardSq = document.createElement("a");
-    boardSq.classList.add("boardSq");
+    if (games[i].players < 2) {
+      const boardSq = document.createElement("a");
+      boardSq.classList.add("boardSq");
 
-    const boardDraw = document.createElement("div");
-    boardDraw.classList.add("boardDraw");
+      const boardDraw = document.createElement("div");
+      boardDraw.classList.add("boardDraw");
 
-    const boardText = document.createElement("p");
-    boardText.classList.add("boardText");
-    boardText.textContent = `Board #${i + 1}`;
+      const boardText = document.createElement("p");
+      boardText.classList.add("boardText");
+      boardText.textContent = `Board #${i + 1}`;
 
-    boardSq.addEventListener("click", function () {
-      socket.emit("joined", games[i].roomId)
-      for (let board of boards.children) {
-        board.remove()
-      }
-      createRoomBtn.remove()
-      for (let board of boards.children) {
-        board.remove()
-      }
-    });
+      boardSq.addEventListener("click", function () {
+        socket.emit("joined", games[i].roomId)
+        for (let board of boards.children) {
+          board.remove()
+        }
+        createRoomBtn.remove()
+        for (let board of boards.children) {
+          board.remove()
+        }
+      });
 
-    boardSq.appendChild(boardDraw);
-    boardSq.appendChild(boardText);
-    boards.appendChild(boardSq);
+      boardSq.appendChild(boardDraw);
+      boardSq.appendChild(boardText);
+      boards.appendChild(boardSq);
+    }
 
   }
 })
