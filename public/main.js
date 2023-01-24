@@ -5,6 +5,8 @@ var color = "white";
 var players;
 var roomId;
 var play = true;
+var moveSound = new Audio('./sounds/move-self.mp3');
+var captureSound = new Audio('./sounds/capture.mp3');
 
 var state = document.getElementById("state");
 
@@ -65,6 +67,7 @@ socket.on("move", function (msg) {
   if (msg.room == roomId) {
     game.move(msg.move);
     board.position(game.fen());
+    moveSound.play();
     console.log("moved");
   }
 });
@@ -116,7 +119,8 @@ var onDrop = function (source, target) {
 
   // illegal move
   if (move === null) return "snapback";
-  else socket.emit("move", { move: move, board: game.fen(), room: roomId });
+  else if (move.captured) captureSound.play()
+  else moveSound.play(); socket.emit("move", { move: move, board: game.fen(), room: roomId });
 };
 
 var onMouseoverSquare = function (square, piece) {
