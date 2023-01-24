@@ -37,6 +37,9 @@ socket.on('showRooms', (games) => {
         board.remove()
       }
       createRoomBtn.remove()
+      for (let board of boards.children) {
+        board.remove()
+      }
     });
 
     boardSq.appendChild(boardDraw);
