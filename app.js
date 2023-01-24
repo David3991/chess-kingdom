@@ -12,10 +12,11 @@ var players;
 
 app.use(express.static(__dirname + "/public"));
 
-var games = Array(100);
-for (let i = 0; i < 100; i++) {
-  games[i] = { players: 0, pid: [0, 0] };
-}
+var games = []
+// var games = Array(100);
+// for (let i = 0; i < 100; i++) {
+//   games[i] = { players: 0, pid: [0, 0] };
+// }
 
 app.get("/", (req, res) => {
   res.sendFile(__dirname + "/index.html");
@@ -27,26 +28,38 @@ io.on("connection", function (socket) {
   var playerId = uuidv4();
 
   console.log(playerId + " connected");
-
+  socket.emit("showRooms", games)
   socket.on("joined", function (roomId) {
     // games[roomId] = {}
-    if (games[roomId].players < 2) {
-      games[roomId].players++;
-      games[roomId].pid[games[roomId].players - 1] = playerId;
+    if (games.find(game => game.roomId === roomId).players < 2) {
+      games.find(game => game.roomId === roomId).players++;
+      games.find(game => game.roomId === roomId).pid[games.find(game => game.roomId === roomId).players - 1] = playerId;
     } else {
-      socket.emit("full", roomId);
+      socket.emit("full", games.find(game => game.roomId === roomId).roomId);
       return;
     }
 
-    console.log(games[roomId]);
-    players = games[roomId].players;
+    console.log(games.find(game => game.roomId === roomId));
+    players = games.find(game => game.roomId === roomId).players;
 
     if (players % 2 == 0) color = "black";
     else color = "white";
 
-    socket.emit("player", { playerId, players, color, roomId });
+    roomId2 = games.find(game => game.roomId === roomId).players;
+
+    socket.emit("player", { playerId, players, color, roomId2 });
     // players--;
   });
+
+  socket.on('createRoom', () => {
+    roomId = uuidv4()
+    games.push({
+      roomId: `${roomId}`,
+      players: 0,
+      pid: [0, 0]
+    })
+    socket.emit("showRooms", games)
+  })
 
   socket.on("move", function (msg) {
     socket.broadcast.emit("move", msg);
@@ -63,7 +76,7 @@ io.on("connection", function (socket) {
   });
 
   socket.on("disconnect", function () {
-    for (let i = 0; i < 100; i++) {
+    for (let i = 0; i < games.length; i++) {
       if (games[i].pid[0] == playerId || games[i].pid[1] == playerId)
         games[i].players--;
     }
