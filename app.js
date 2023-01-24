@@ -45,14 +45,14 @@ io.on("connection", function (socket) {
     if (players % 2 == 0) color = "black";
     else color = "white";
 
-    roomId2 = games.find(game => game.roomId === roomId).players;
+    let roomId2 = games.find(game => game.roomId === roomId).roomId;
 
     socket.emit("player", { playerId, players, color, roomId2 });
     // players--;
   });
 
   socket.on('createRoom', () => {
-    roomId = uuidv4()
+    let roomId = uuidv4()
     games.push({
       roomId: `${roomId}`,
       players: 0,

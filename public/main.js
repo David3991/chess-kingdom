@@ -1,4 +1,6 @@
-game = new Chess();
+// eslint-disable-next-line no-undef
+var game = new Chess();
+// eslint-disable-next-line no-undef
 var socket = io();
 
 var color = "white";
@@ -7,18 +9,17 @@ var roomId;
 var play = true;
 var moveSound = new Audio('./sounds/move-self.mp3');
 var captureSound = new Audio('./sounds/capture.mp3');
-var capturedPieces = [];
 
 var state = document.getElementById("state");
 
 const createRoomBtn = document.getElementById("createRoomBtn")
 
+// eslint-disable-next-line no-unused-vars
 var createRoom = () => {
   socket.emit('createRoom')
 }
 
 socket.on('showRooms', (games) => {
-  const container = document.getElementsByClassName("container")
   const boards = document.getElementById("boards")
   for (let board of boards.children) {
     board.remove()
@@ -61,8 +62,8 @@ socket.on("play", function (msg) {
     play = false;
     state.innerHTML = "Game in Progress";
   }
-  // console.log(msg)
 });
+
 
 socket.on("move", function (msg) {
   if (msg.room == roomId) {
@@ -74,10 +75,12 @@ socket.on("move", function (msg) {
 });
 
 var removeGreySquares = function () {
+  // eslint-disable-next-line no-undef
   $("#board .square-55d63").css("background", "");
 };
 
 var greySquare = function (square) {
+  // eslint-disable-next-line no-undef
   var squareEl = $("#board .square-" + square);
 
   var background = "#a9a9a9";
@@ -142,7 +145,7 @@ var onDrop = function (source, target) {
   else moveSound.play(); socket.emit("move", { move: move, board: game.fen(), room: roomId });
 };
 
-var onMouseoverSquare = function (square, piece) {
+var onMouseoverSquare = function (square) {
   // get list of possible moves for this square
   var moves = game.moves({
     square: square,
@@ -161,7 +164,7 @@ var onMouseoverSquare = function (square, piece) {
   }
 };
 
-var onMouseoutSquare = function (square, piece) {
+var onMouseoutSquare = function () {
   removeGreySquares();
 };
 
@@ -176,6 +179,7 @@ socket.on('gameOver', (dRoomId) => {
 })
 
 socket.on("player", (msg) => {
+  roomId = msg.roomId2;
   var plno = document.getElementById("player");
   color = msg.color;
 
@@ -184,7 +188,7 @@ socket.on("player", (msg) => {
 
   if (players == 2) {
     play = false;
-    socket.emit("play", msg.roomId);
+    socket.emit("play", msg.roomId2);
     state.innerHTML = "Game in Progress";
   } else state.innerHTML = "Waiting for Second player";
 
@@ -198,6 +202,7 @@ socket.on("player", (msg) => {
     onMouseoverSquare: onMouseoverSquare,
     onSnapEnd: onSnapEnd,
   };
+  // eslint-disable-next-line no-undef
   board = ChessBoard("board", cfg);
 });
 // console.log(color)
