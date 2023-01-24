@@ -12,7 +12,7 @@
 <p>No installation is required to play the game. Simply go to the website <a href="https://chesskingdom.onrender.com">https://chesskingdom.onrender.com</a> and start playing.</p>
 
 <h2>Usage</h2>
-<p>To start the game, go to the website <a href="https://chesskingdom.onrender.com">https://chesskingdom.onrender.com</a> and enter a room number and click on "Connect" button. The game will start in two player mode on the website. Players can take turns to make their moves.</p>
+<p>To start the game, go to the website <a href="https://chesskingdom.onrender.com">https://chesskingdom.onrender.com</a> and click on a room or click on the "Create Room" button. The game will start in two player mode on the website. Players can take turns to make their moves.</p>
 
 <h2>Contributions</h2>
 <p>We welcome contributions to the project. If you would like to contribute, please fork the repository and make a pull request with your changes.</p>
