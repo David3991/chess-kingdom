@@ -55,6 +55,10 @@ socket.on('showRooms', (games) => {
   }
 })
 
+socket.on('joined', (roomId) => {
+  socket.emit("joined", roomId)
+})
+
 socket.on("full", function (msg) {
   if (roomId == msg) window.location.assign(window.location.href + "full.html");
 });
