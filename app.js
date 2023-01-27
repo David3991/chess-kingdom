@@ -76,6 +76,11 @@ io.on("connection", function (socket) {
   });
 });
 
+//The 404 Route (ALWAYS Keep this as the last route)
+app.get('*', function (req, res) {
+  res.redirect('404.html');
+});
+
 server.listen(port, () => {
   console.log("Server running on port", port);
 })
