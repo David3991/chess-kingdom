@@ -19,13 +19,13 @@ var createRoom = () => {
   socket.emit('createRoom')
 }
 
+const boards = document.getElementById("boards")
 socket.on('showRooms', (games) => {
-  const boards = document.getElementById("boards")
   for (let board of boards.children) {
     board.remove()
   }
   for (let i = 0; i < games.length; i++) {
-    if (games[i].players < 2) {
+    if (games[i].players < 2 && play) {
       const boardSq = document.createElement("a");
       boardSq.classList.add("boardSq");
 
@@ -37,14 +37,7 @@ socket.on('showRooms', (games) => {
       boardText.textContent = `Board #${i + 1}`;
 
       boardSq.addEventListener("click", function () {
-        socket.emit("joined", games[i].roomId)
-        for (let board of boards.children) {
-          board.remove()
-        }
-        createRoomBtn.remove()
-        for (let board of boards.children) {
-          board.remove()
-        }
+        joinRoom(games[i].roomId)
       });
 
       boardSq.appendChild(boardDraw);
@@ -55,8 +48,16 @@ socket.on('showRooms', (games) => {
   }
 })
 
-socket.on('joined', (roomId) => {
+function joinRoom(roomId) {
   socket.emit("joined", roomId)
+  for (let board of boards.children) {
+    board.remove()
+  }
+  createRoomBtn.remove()
+}
+
+socket.on('joined', (roomId) => {
+  joinRoom(roomId)
 })
 
 socket.on("full", function (msg) {
