@@ -28,7 +28,7 @@ io.on("connection", function (socket) {
       players: 0,
       pid: [null, null]
     })
-    socket.emit("showRooms", games)
+    socket.broadcast.emit("showRooms", games)
     // add this line to automatically join the room
     socket.emit("joined", roomId);
   })
