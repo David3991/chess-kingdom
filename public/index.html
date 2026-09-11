@@ -3,83 +3,97 @@
 
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>ChessKingdom</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
-    integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous" />
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
-    integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+    crossorigin="anonymous" />
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
     crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.5.0/socket.io.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
   <script src="./chess.js/chess.js"></script>
   <script src="./chessboard/js/chessboard.js"></script>
   <link rel="stylesheet" href="./chessboard/css/chessboard.css" />
   <link rel="stylesheet" href="./css/style.css" />
-  <style>
-    .number::-webkit-inner-spin-button,
-    .number::-webkit-outer-spin-button {
-      -webkit-appearance: none;
-      margin: 0;
-    }
-
-    .container {
-      width: 100%;
-      margin: 0;
-    }
-
-    #roomNumbers {
-      margin: 7px;
-    }
-
-    body {
-      margin: 4%;
-      width: 96%;
-    }
-
-    #boards {
-      width: 100%;
-      display: flex;
-      justify-content: flex-start;
-      flex-direction: row;
-      flex-wrap: wrap;
-    }
-
-    .boardSq {
-      display: flex;
-      align-self: center;
-      align-items: center;
-      justify-content: center;
-      flex-direction: column;
-      margin: 20px;
-    }
-
-    .boardDraw {
-      width: 10rem;
-      height: 10rem;
-      background-image: url(./img/rooms/board_room.png);
-      background-size: contain;
-    }
-
-    .boardText {
-      display: inline;
-    }
-  </style>
 </head>
 
 <body>
-  <div class="container">
-    <div id="board" style="width: 600px; margin: auto"></div>
+  <div id="banner" class="banner d-none"></div>
 
-    <button id="createRoomBtn" class="btn btn-success" onclick="createRoom()">
-      Create Room
-    </button>
+  <div class="container-fluid app">
+    <header class="app-header">
+      <h1>Chess Kingdom</h1>
+    </header>
 
-    <div id="boards"></div>
+    <!-- LOBBY -->
+    <section id="lobby">
+      <button id="createRoomBtn" class="btn btn-success">Create Room</button>
+      <div id="boards"></div>
+      <p id="lobbyEmpty" class="lobby-empty d-none">No open rooms right now — create one to start playing.</p>
+    </section>
 
-    <div id="player"></div>
+    <!-- GAME -->
+    <section id="game" class="game d-none">
+      <div class="game-main">
+        <div id="board" class="board"></div>
 
-    <div id="state"></div>
+        <div class="game-controls">
+          <span id="turnIndicator" class="badge"></span>
+          <button id="offerDrawBtn" class="btn btn-sm btn-outline-light">Offer Draw</button>
+          <button id="resignBtn" class="btn btn-sm btn-outline-danger">Resign</button>
+          <button id="leaveBtn" class="btn btn-sm btn-outline-secondary d-none">Back to Lobby</button>
+        </div>
+
+        <div id="state" class="state"></div>
+      </div>
+
+      <aside class="game-sidebar">
+        <div class="panel">
+          <h2>Players</h2>
+          <div id="player" class="player-info"></div>
+          <div id="opponentStatus" class="opponent-status"></div>
+        </div>
+
+        <div class="panel">
+          <h2>Captured</h2>
+          <div class="captured-line"><span class="captured-label">White captured:</span><div id="capturedByWhite" class="captured-row"></div></div>
+          <div class="captured-line"><span class="captured-label">Black captured:</span><div id="capturedByBlack" class="captured-row"></div></div>
+        </div>
+
+        <div class="panel panel-grow">
+          <h2>Moves</h2>
+          <ol id="moveList" class="move-list"></ol>
+        </div>
+
+        <div class="panel panel-grow">
+          <h2>Chat</h2>
+          <div id="chatLog" class="chat-log"></div>
+          <form id="chatForm" class="chat-form">
+            <input id="chatInput" type="text" maxlength="300" placeholder="Say something..." autocomplete="off" />
+            <button type="submit" class="btn btn-sm btn-primary">Send</button>
+          </form>
+        </div>
+      </aside>
+    </section>
+  </div>
+
+  <!-- Promotion picker -->
+  <div id="promotionOverlay" class="promotion-overlay d-none">
+    <div class="promotion-box">
+      <p>Promote to:</p>
+      <button class="promo-choice" data-piece="q">Queen</button>
+      <button class="promo-choice" data-piece="r">Rook</button>
+      <button class="promo-choice" data-piece="b">Bishop</button>
+      <button class="promo-choice" data-piece="n">Knight</button>
+    </div>
+  </div>
+
+  <!-- Draw offer prompt -->
+  <div id="drawOfferBox" class="draw-offer d-none">
+    <span>Your opponent offers a draw.</span>
+    <button id="drawAcceptBtn" class="btn btn-sm btn-success">Accept</button>
+    <button id="drawDeclineBtn" class="btn btn-sm btn-outline-light">Decline</button>
   </div>
 
   <script src="./main.js"></script>
