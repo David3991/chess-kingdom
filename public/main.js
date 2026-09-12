@@ -305,6 +305,7 @@ socket.on("opponentReconnected", () => {
 
 socket.on("drawOffered", () => el.drawOfferBox.classList.remove("d-none"));
 socket.on("drawDeclined", () => showBanner("Draw declined.", "info"));
+socket.on("chatMessage", (msg) => renderChatMessage(msg));
 
 el.resignBtn.addEventListener("click", () => {
   if (status !== "active") return;
